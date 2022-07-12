@@ -44,6 +44,7 @@ public class StudentFormController {
     public TableColumn colNic;
     public TableColumn colOperate;
     private ObservableList<Student> obList = null;
+    private Student student = null;
 
     public void initialize(){
         colId.setCellValueFactory(new PropertyValueFactory<>("stId"));
@@ -68,6 +69,8 @@ public class StudentFormController {
             HBox.setMargin(edit, new Insets(2,3,2,2));
             HBox.setMargin(delete, new Insets(2,2,2,3));
 
+            clickedEditBtn(edit);
+
             return new ReadOnlyObjectWrapper<>(hBox);
         });
 
@@ -77,6 +80,19 @@ public class StudentFormController {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clickedEditBtn(ImageView edit) {
+        edit.setOnMouseClicked(event -> {
+            student = tblStudent.getSelectionModel().getSelectedItem();
+            txtId.setText(student.getStId());
+            txtName.setText(student.getStName());
+            txtEmail.setText(student.getEmail());
+            txtContact.setText(student.getContact());
+            txtAddress.setText(student.getAddress());
+            txtNic.setText(student.getNic());
+            txtId.setEditable(false);
+        });
     }
 
     private void loadAllStudents() throws SQLException, ClassNotFoundException {
@@ -122,6 +138,7 @@ public class StudentFormController {
         txtContact.clear();
         txtAddress.clear();
         txtNic.clear();
+        txtId.setEditable(true);
     }
 
 
