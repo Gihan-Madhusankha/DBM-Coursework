@@ -7,10 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -19,6 +16,7 @@ import util.SQLUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * @author : Gihan Madhusankha
@@ -70,6 +68,7 @@ public class StudentFormController {
             HBox.setMargin(delete, new Insets(2,2,2,3));
 
             clickedEditBtn(edit);
+            clickedDeleteBtn(delete);
 
             return new ReadOnlyObjectWrapper<>(hBox);
         });
@@ -80,6 +79,37 @@ public class StudentFormController {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clickedDeleteBtn(ImageView delete) {
+        delete.setOnMouseClicked(event -> {
+            student = tblStudent.getSelectionModel().getSelectedItem();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure delete "+ student.getStId()+" student?", ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> buttonType = alert.showAndWait();
+
+            if (buttonType.get().equals(ButtonType.YES)) {
+                try {
+                    boolean d = SQLUtil.executeUpdate("DELETE FROM Student WHERE student_id = ?", student.getStId());
+
+                    if (d){
+                        obList.clear();
+                        loadAllStudents();
+                        clearForm();
+                        new Alert(Alert.AlertType.CONFIRMATION, "Deleted").show();
+
+                    } else {
+                        new Alert(Alert.AlertType.ERROR, "Something else").show();
+                    }
+
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        });
     }
 
     private void clickedEditBtn(ImageView edit) {
