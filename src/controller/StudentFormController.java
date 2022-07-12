@@ -131,6 +131,7 @@ public class StudentFormController {
                         obList.clear();
                         loadAllStudents();
                         clearForm();
+                        searchStudent();
                         new Alert(Alert.AlertType.CONFIRMATION, "Deleted").show();
 
                     } else {
@@ -140,9 +141,7 @@ public class StudentFormController {
                 } catch (SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
-
 
         });
     }
@@ -158,6 +157,7 @@ public class StudentFormController {
             txtNic.setText(student.getNic());
             txtId.setEditable(false);
             btnAdd.setText("UPDATE");
+            searchStudent();
         });
     }
 
@@ -180,6 +180,7 @@ public class StudentFormController {
 
     public void clearFormOnAction(ActionEvent actionEvent) {
         clearForm();
+        searchStudent();
     }
 
     public void addBtnOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -213,6 +214,7 @@ public class StudentFormController {
                 new Alert(Alert.AlertType.ERROR, "Something else").show();
             }
         }
+        searchStudent();
     }
 
     private void clearForm() {
@@ -224,7 +226,7 @@ public class StudentFormController {
         txtNic.clear();
         txtId.setEditable(true);
         btnAdd.setText("ADD");
+        searchStudent();
     }
-
 
 }

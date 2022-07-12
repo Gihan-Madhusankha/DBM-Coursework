@@ -2,16 +2,19 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="590.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentFormController">
    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffc10897" height="590.0" stroke="#ff000000" strokeType="INSIDE" width="600.0" />
       <Label alignment="CENTER" layoutY="10.0" prefHeight="26.0" prefWidth="600.0" text="Student Management" textFill="#4055ff">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -26,13 +29,19 @@
       <JFXTextField fx:id="txtAddress" labelFloat="true" layoutX="220.0" layoutY="134.0" prefHeight="27.0" prefWidth="160.0" promptText="Address" />
       <JFXButton fx:id="btnAdd" buttonType="RAISED" layoutX="421.0" layoutY="180.0" onAction="#addBtnOnAction" prefHeight="34.0" prefWidth="160.0" style="-fx-border-radius: 3; -fx-background-color: #1dd1a1;" text="ADD" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <JFXButton fx:id="btnClearForm" buttonType="RAISED" layoutX="19.0" layoutY="180.0" onAction="#clearFormOnAction" prefHeight="34.0" prefWidth="160.0" style="-fx-border-radius: 3; -fx-background-color: #ff6b6b;" text="CLEAR FORM" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <TextField fx:id="txtSearch" layoutX="19.0" layoutY="256.0" prefHeight="30.0" prefWidth="562.0" promptText="Search" />
       <TableView fx:id="tblStudent" layoutX="19.0" layoutY="295.0" prefHeight="275.0" prefWidth="562.0">
