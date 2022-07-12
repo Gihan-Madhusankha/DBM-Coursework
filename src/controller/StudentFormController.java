@@ -34,7 +34,6 @@ public class StudentFormController {
     public JFXTextField txtAddress;
     public JFXButton btnAdd;
     public JFXButton btnClearForm;
-    public JFXButton btnNew;
     public TextField txtSearch;
     public TableView<Student> tblStudent;
     public TableColumn colId;
@@ -70,7 +69,6 @@ public class StudentFormController {
             HBox.setMargin(delete, new Insets(2,2,2,3));
 
             return new ReadOnlyObjectWrapper<>(hBox);
-
         });
 
         try {
@@ -96,9 +94,6 @@ public class StudentFormController {
             ));
         }
         tblStudent.setItems(obList);
-    }
-
-    public void newBtnOnAction(ActionEvent actionEvent) {
     }
 
     public void clearFormOnAction(ActionEvent actionEvent) {
