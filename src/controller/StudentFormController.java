@@ -102,6 +102,7 @@ public class StudentFormController {
     }
 
     public void clearFormOnAction(ActionEvent actionEvent) {
+        clearForm();
     }
 
     public void addBtnOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -111,11 +112,21 @@ public class StudentFormController {
         if (save) {
             obList.clear();
             loadAllStudents();
+            clearForm();
             new Alert(Alert.AlertType.CONFIRMATION, "Saved Student").show();
 
         } else {
             new Alert(Alert.AlertType.ERROR, "Something else").show();
         }
+    }
+
+    private void clearForm() {
+        txtId.clear();
+        txtName.clear();
+        txtEmail.clear();
+        txtContact.clear();
+        txtAddress.clear();
+        txtNic.clear();
     }
 
 
