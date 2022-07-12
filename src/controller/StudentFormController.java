@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -44,7 +46,7 @@ public class StudentFormController {
     private ObservableList<Student> obList = null;
     private Student student = null;
 
-    public void initialize(){
+    public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("stId"));
         colName.setCellValueFactory(new PropertyValueFactory<>("stName"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -64,8 +66,8 @@ public class StudentFormController {
             delete.setStyle("-fx-cursor: Hand");
 
             hBox.setStyle("-fx-alignment: Center");
-            HBox.setMargin(edit, new Insets(2,3,2,2));
-            HBox.setMargin(delete, new Insets(2,2,2,3));
+            HBox.setMargin(edit, new Insets(2, 3, 2, 2));
+            HBox.setMargin(delete, new Insets(2, 2, 2, 3));
 
             clickedEditBtn(edit);
             clickedDeleteBtn(delete);
@@ -75,24 +77,57 @@ public class StudentFormController {
 
         try {
             loadAllStudents();
+            searchStudent();
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    private void searchStudent() {
+        FilteredList<Student> filteredList = new FilteredList<>(obList, b -> true);
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            filteredList.setPredicate(searchModel -> {
+
+                if (newValue.isEmpty() || newValue == null) {
+                    return true;
+                }
+
+                String searchKeyword = newValue.toLowerCase();
+                if (searchModel.getStId().toLowerCase().indexOf(searchKeyword) > -1) {
+                    return true;
+                } else if (searchModel.getStName().toLowerCase().indexOf(searchKeyword) > -1) {
+                    return true;
+                } else if (searchModel.getEmail().toLowerCase().indexOf(searchKeyword) > -1) {
+                    return true;
+                } else if (searchModel.getContact().toLowerCase().indexOf(searchKeyword) > -1) {
+                    return true;
+                } else if (searchModel.getAddress().toLowerCase().indexOf(searchKeyword) > -1) {
+                    return true;
+                }
+                return searchModel.getNic().toLowerCase().indexOf(searchKeyword) > -1;
+
+            });
+        });
+
+        SortedList<Student> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(tblStudent.comparatorProperty());
+        tblStudent.setItems(sortedList);
+    }
+
     private void clickedDeleteBtn(ImageView delete) {
         delete.setOnMouseClicked(event -> {
             student = tblStudent.getSelectionModel().getSelectedItem();
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure delete "+ student.getStId()+" student?", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure delete " + student.getStId() + " student?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> buttonType = alert.showAndWait();
 
             if (buttonType.get().equals(ButtonType.YES)) {
                 try {
                     boolean d = SQLUtil.executeUpdate("DELETE FROM Student WHERE student_id = ?", student.getStId());
 
-                    if (d){
+                    if (d) {
                         obList.clear();
                         loadAllStudents();
                         clearForm();
