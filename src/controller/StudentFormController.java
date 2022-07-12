@@ -92,6 +92,7 @@ public class StudentFormController {
             txtAddress.setText(student.getAddress());
             txtNic.setText(student.getNic());
             txtId.setEditable(false);
+            btnAdd.setText("UPDATE");
         });
     }
 
@@ -117,17 +118,35 @@ public class StudentFormController {
     }
 
     public void addBtnOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        boolean save = SQLUtil.executeUpdate("INSERT INTO Student VALUES(?,?,?,?,?,?)",
-                txtId.getText(), txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNic.getText());
 
-        if (save) {
-            obList.clear();
-            loadAllStudents();
-            clearForm();
-            new Alert(Alert.AlertType.CONFIRMATION, "Saved Student").show();
+        if (btnAdd.getText().equals("ADD")) {
+
+            boolean save = SQLUtil.executeUpdate("INSERT INTO Student VALUES(?,?,?,?,?,?)",
+                    txtId.getText(), txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNic.getText());
+
+            if (save) {
+                obList.clear();
+                loadAllStudents();
+                clearForm();
+                new Alert(Alert.AlertType.CONFIRMATION, "Saved Student").show();
+
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Something else").show();
+            }
 
         } else {
-            new Alert(Alert.AlertType.ERROR, "Something else").show();
+            boolean update = SQLUtil.executeUpdate("UPDATE Student SET student_name = ?, email = ?, contact = ?, address = ?, nic = ? WHERE student_id = ?",
+                    txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNic.getText(), txtId.getText());
+
+            if (update) {
+                obList.clear();
+                loadAllStudents();
+                clearForm();
+                new Alert(Alert.AlertType.CONFIRMATION, "Updated").show();
+
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Something else").show();
+            }
         }
     }
 
@@ -139,6 +158,7 @@ public class StudentFormController {
         txtAddress.clear();
         txtNic.clear();
         txtId.setEditable(true);
+        btnAdd.setText("ADD");
     }
 
 
