@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -43,6 +44,7 @@ public class StudentFormController {
     public TableColumn colAddress;
     public TableColumn colNic;
     public TableColumn colOperate;
+    private ObservableList<Student> obList = null;
 
     public void initialize(){
         colId.setCellValueFactory(new PropertyValueFactory<>("stId"));
@@ -80,7 +82,7 @@ public class StudentFormController {
     }
 
     private void loadAllStudents() throws SQLException, ClassNotFoundException {
-        ObservableList<Student> obList = FXCollections.observableArrayList();
+        obList = FXCollections.observableArrayList();
         ResultSet resultSet = SQLUtil.executeQuery("SELECT * FROM student");
 
         while (resultSet.next()) {
@@ -102,6 +104,19 @@ public class StudentFormController {
     public void clearFormOnAction(ActionEvent actionEvent) {
     }
 
-    public void addBtnOnAction(ActionEvent actionEvent) {
+    public void addBtnOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        boolean save = SQLUtil.executeUpdate("INSERT INTO Student VALUES(?,?,?,?,?,?)",
+                txtId.getText(), txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNic.getText());
+
+        if (save) {
+            obList.clear();
+            loadAllStudents();
+            new Alert(Alert.AlertType.CONFIRMATION, "Saved Student").show();
+
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Something else").show();
+        }
     }
+
+
 }
